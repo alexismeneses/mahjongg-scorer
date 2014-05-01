@@ -12,10 +12,10 @@ mahjongg.Player.prototype.score = 1000;
 mahjongg.init = function()
 {
   mahjongg.players = [ new mahjongg.Player(), new mahjongg.Player(), new mahjongg.Player(), new mahjongg.Player()];
-  mahjongg.players[0].name = 'Player 1';
-  mahjongg.players[1].name = 'Player 2';
-  mahjongg.players[2].name = 'Player 3';
-  mahjongg.players[3].name = 'Player 4';
+  mahjongg.players[0].name = localStorage.getItem("name0") || 'Player 1';
+  mahjongg.players[1].name = localStorage.getItem("name1") || 'Player 2';
+  mahjongg.players[2].name = localStorage.getItem("name2") || 'Player 3';
+  mahjongg.players[3].name = localStorage.getItem("name3") || 'Player 4';
 
   mahjongg.players[0].score = localStorage.getItem("score0") || 1000;
   mahjongg.players[1].score = localStorage.getItem("score1") || 1000;
@@ -42,7 +42,7 @@ mahjongg.update = function()
     {
       name += "*";
     }
-    $('#name' + i).html(name);
+    $('.auto-name' + i).html(name);
     $('#score' + i).html(mahjongg.players[i].score);
   }
 };
@@ -90,12 +90,13 @@ mahjongg.reset = function()
     mahjongg.players[i].score = 1000;
   }
   mahjongg.store();
-}
+};
 
 mahjongg.store = function()
 {
   for (var i = 0 ; i < 4 ; i++)
   {
+    localStorage.setItem("name" + i, mahjongg.players[i].name);
     localStorage.setItem("score" + i, mahjongg.players[i].score);
   }
 };

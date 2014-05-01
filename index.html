@@ -18,10 +18,10 @@
       <table class="table">
         <thead>
           <tr>
-            <th><div id="name0">Player 1</div></th>
-            <th><div id="name1">Player 2</div></th>
-            <th><div id="name2">Player 3</div></th>
-            <th><div id="name3">Player 4</div></th>
+            <th><div id="name0" class="auto-name0">Player 1</div></th>
+            <th><div id="name1" class="auto-name1">Player 2</div></th>
+            <th><div id="name2" class="auto-name2">Player 3</div></th>
+            <th><div id="name3" class="auto-name3">Player 4</div></th>
           </tr>
         </thead>
       <tbody>
@@ -38,10 +38,10 @@
     <div class="form-group">
       <label for="score0">Winner</label>
       <select class="form-control" id="inputWinner">
-        <option value="0">Player 1</option>
-        <option value="1">Player 2</option>
-        <option value="2">Player 3</option>
-        <option value="3">Player 4</option>
+        <option value="0" class="auto-name0">Player 1</option>
+        <option value="1" class="auto-name1">Player 2</option>
+        <option value="2" class="auto-name2">Player 3</option>
+        <option value="3" class="auto-name3">Player 4</option>
       </select>
     </div>
     <div class="form-group">
@@ -64,6 +64,7 @@
   </form>
   <hr/>
   <div>
+    <a href="configure.html" class="btn btn-default" onclick="">Configure</a>
     <a href="#" class="btn btn-default" onclick="mahjongg.reset(); return false;">Reset</a>
   </div>
   <div id="log"></div>
