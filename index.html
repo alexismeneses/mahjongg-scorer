@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mah-jongg</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/mahjongg.js"></script>
+  </head>
+  <body>
+    <h1>Mah-jongg scorer</h1>
+    <div class="container">
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th><div id="name0">Player 1</div></th>
+            <th><div id="name1">Player 2</div></th>
+            <th><div id="name2">Player 3</div></th>
+            <th><div id="name3">Player 4</div></th>
+          </tr>
+        </thead>
+      <tbody>
+        <tr>
+          <td><div id="score0"></div></td>
+          <td><div id="score1"></div></td>
+          <td><div id="score2"></div></td>
+          <td><div id="score3"></div></td>
+        </tr>
+      </tbody>
+    </table>
+
+  <form role="form">
+    <div class="form-group">
+      <label for="score0">Winner</label>
+      <select class="form-control" id="inputWinner">
+        <option value="0">Player 1</option>
+        <option value="1">Player 2</option>
+        <option value="2">Player 3</option>
+        <option value="3">Player 4</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="score0">Hand of player 1</label>
+      <input type="text" class="form-control" id="inputScore0">
+    </div>
+    <div class="form-group">
+      <label for="score1">Hand of player 2</label>
+      <input type="text" class="form-control" id="inputScore1">
+    </div>
+    <div class="form-group">
+      <label for="score1">Hand of player 3</label>
+      <input type="text" class="form-control" id="inputScore2">
+    </div>
+    <div class="form-group">
+      <label for="score1">Hand of player 4</label>
+      <input type="text" class="form-control" id="inputScore3">
+    </div>
+    <a href="#" class="btn btn-default" onclick="mahjongg.submit(); return false;">Submit</a>
+  </form>
+  <hr/>
+  <div>
+    <a href="#" class="btn btn-default" onclick="mahjongg.reset(); return false;">Reset</a>
+  </div>
+  <div id="log"></div>
+  </div>
+</body>
+</html>
