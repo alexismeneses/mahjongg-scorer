@@ -87,13 +87,16 @@ mahjongg.endRound = function(winner, scores)
 
 mahjongg.reset = function()
 {
-  mahjongg.east = 0;
-  mahjongg.round = 0;
-  for (var i = 0 ; i < 4 ; i++)
+  if (confirm("Do you confirm reset?"))
   {
-    mahjongg.players[i].score = 1000;
+    mahjongg.east = 0;
+    mahjongg.round = 0;
+    for (var i = 0 ; i < 4 ; i++)
+    {
+      mahjongg.players[i].score = 1000;
+    }
+    mahjongg.store();
   }
-  mahjongg.store();
 };
 
 mahjongg.store = function()
@@ -116,6 +119,15 @@ mahjongg.submit = function()
         parseInt($("#inputScore2").val()),
         parseInt($("#inputScore3").val()),
       ]);
+  for (var i = 0 ; i < 4 ; i++)
+  {
+    $("#inputScore" + i).val("");
+  }
 };
 
 mahjongg.init();
+
+$(function()
+{
+  mahjongg.update();
+});
