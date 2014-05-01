@@ -11,6 +11,8 @@ mahjongg.Player.prototype.score = 1000;
 
 mahjongg.init = function()
 {
+  mahjongg.round = parseInt(localStorage.getItem("round") || 0);
+  mahjongg.east = parseInt(localStorage.getItem("east") || 0);
   mahjongg.players = [ new mahjongg.Player(), new mahjongg.Player(), new mahjongg.Player(), new mahjongg.Player()];
   mahjongg.players[0].name = localStorage.getItem("name0") || 'Player 1';
   mahjongg.players[1].name = localStorage.getItem("name1") || 'Player 2';
@@ -85,6 +87,8 @@ mahjongg.endRound = function(winner, scores)
 
 mahjongg.reset = function()
 {
+  mahjongg.east = 0;
+  mahjongg.round = 0;
   for (var i = 0 ; i < 4 ; i++)
   {
     mahjongg.players[i].score = 1000;
@@ -94,6 +98,8 @@ mahjongg.reset = function()
 
 mahjongg.store = function()
 {
+  localStorage.setItem("east", mahjongg.east);
+  localStorage.setItem("round", mahjongg.round);
   for (var i = 0 ; i < 4 ; i++)
   {
     localStorage.setItem("name" + i, mahjongg.players[i].name);
