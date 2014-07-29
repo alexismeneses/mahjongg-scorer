@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="mahjonggApp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,68 +7,26 @@
     <title>Mah-jongg</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/mahjongg.css" rel="stylesheet">
     <script src="js/jquery.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script src="js/angular-ngwebstorage.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/mahjongg.js"></script>
   </head>
-  <body>
-    <h1>Mah-jongg scorer</h1>
+  <body role="document" ng-controller="MainCtrl">
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Mah-Jongg scorer</a>
+        </div>
+      </div>
+    </div>
+
     <div class="container">
-
-      <table class="table">
-        <thead>
-          <tr>
-            <th><div id="name0" class="auto-name0">Player 1</div></th>
-            <th><div id="name1" class="auto-name1">Player 2</div></th>
-            <th><div id="name2" class="auto-name2">Player 3</div></th>
-            <th><div id="name3" class="auto-name3">Player 4</div></th>
-          </tr>
-        </thead>
-      <tbody>
-        <tr>
-          <td><div id="score0"></div></td>
-          <td><div id="score1"></div></td>
-          <td><div id="score2"></div></td>
-          <td><div id="score3"></div></td>
-        </tr>
-      </tbody>
-    </table>
-
-  <form role="form">
-    <div class="form-group">
-      <label for="score0">Winner</label>
-      <select class="form-control" id="inputWinner">
-        <option value="0" class="auto-name0">Player 1</option>
-        <option value="1" class="auto-name1">Player 2</option>
-        <option value="2" class="auto-name2">Player 3</option>
-        <option value="3" class="auto-name3">Player 4</option>
-      </select>
+      <div ng-view></div>
     </div>
-    <div class="form-group">
-      <label for="score0">Hand of <span class="auto-name0">player 1</span></label>
-      <input type="text" class="form-control" id="inputScore0">
-    </div>
-    <div class="form-group">
-      <label for="score1">Hand of <span class="auto-name1">player 2</span></label>
-      <input type="text" class="form-control" id="inputScore1">
-    </div>
-    <div class="form-group">
-      <label for="score1">Hand of <span class="auto-name2">player 3</span></label>
-      <input type="text" class="form-control" id="inputScore2">
-    </div>
-    <div class="form-group">
-      <label for="score1">Hand of <span class="auto-name3">player 4</span></label>
-      <input type="text" class="form-control" id="inputScore3">
-    </div>
-    <a href="#" class="btn btn-default" onclick="mahjongg.submit(); return false;">Submit</a>
-  </form>
-  <hr/>
-  <div>
-    <a href="configure.html" class="btn btn-default" onclick="">Configure</a>
-    <a href="override.html" class="btn btn-default" onclick="">Override</a>
-    <a href="#" class="btn btn-default" onclick="mahjongg.reset(); return false;">Reset</a>
-  </div>
-  <div id="log"></div>
-  </div>
-</body>
+  </body>
 </html>

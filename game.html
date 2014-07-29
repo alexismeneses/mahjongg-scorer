@@ -1,0 +1,32 @@
+<div ng-controller="GameCtrl">
+<table class="table">
+  <thead>
+  <tr>
+    <th ng-repeat="player in players"><div>{{player.name}} <span ng-if="$index == game.east">*</span></div></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td ng-repeat="player in players">{{player.score}}</td>
+  </tr>
+  </tbody>
+</table>
+
+<form role="form" ng-submit="endRound()">
+  <div class="form-group">
+    <label>Winner</label>
+    <select class="form-control" ng-model="inputWinner" ng-options="index as player.name for (index, player) in players" ng-required="true"></select>
+  </div>
+  <div class="form-group" ng-repeat="player in players">
+    <label>Hand of {{player.name}} <span ng-if="$index == game.east">*</span></label>
+    <input type="text" class="form-control" ng-model="player.currentHand" ng-required="true">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+<hr/>
+<div>
+  <a href="#configure" class="btn btn-default">Configure</a>
+  <a href="#override" class="btn btn-default">Override</a>
+  <a href class="btn btn-default" ng-confirm="Do you want to reset scores?" ng-confirm-action="newGame()">Reset</a>
+</div>
+</div>

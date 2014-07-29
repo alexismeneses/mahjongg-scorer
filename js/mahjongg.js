@@ -1,133 +1,134 @@
-mahjongg = {};
+(function() {
 
-mahjongg.Player = function()
-{
-};
+    var app = angular.module('mahjonggApp', ['ngRoute', 'ngWebstorage']);
 
-mahjongg.round = 0;
-mahjongg.east = 0;
-mahjongg.Player.prototype.name = "Player";
-mahjongg.Player.prototype.score = 1000;
+    app.config(function($routeProvider) {
+        $routeProvider
+            .when('/',
+            {
+                templateUrl: 'game.html'
+            })
+            .when('/override', {
+                templateUrl: 'override.html'
+            })
+            .when('/configure', {
+                templateUrl: 'configure.html'
+            });
+    });
 
-mahjongg.init = function()
-{
-  mahjongg.round = parseInt(localStorage.getItem("round") || 0);
-  mahjongg.east = parseInt(localStorage.getItem("east") || 0);
-  mahjongg.players = [ new mahjongg.Player(), new mahjongg.Player(), new mahjongg.Player(), new mahjongg.Player()];
-  mahjongg.players[0].name = localStorage.getItem("name0") || 'Player 1';
-  mahjongg.players[1].name = localStorage.getItem("name1") || 'Player 2';
-  mahjongg.players[2].name = localStorage.getItem("name2") || 'Player 3';
-  mahjongg.players[3].name = localStorage.getItem("name3") || 'Player 4';
+    app.directive('ngConfirm',
+        function()
+        {
+            return {
+                restrict: 'A',
+                link: function(scope, element, attr)
+                {
+                    element.bind('click', function (event)
+                    {
+                        if (window.confirm(attr.ngConfirm))
+                        {
+                            scope.$apply(attr.ngConfirmAction)
+                        }
+                    });
+                }
+            };
+        });
 
-  mahjongg.players[0].score = localStorage.getItem("score0") || 1000;
-  mahjongg.players[1].score = localStorage.getItem("score1") || 1000;
-  mahjongg.players[2].score = localStorage.getItem("score2") || 1000;
-  mahjongg.players[3].score = localStorage.getItem("score3") || 1000;
-  
-  for(var i = 0; i < 4; i++)
-  {
-    mahjongg.players[i].score = parseInt(mahjongg.players[i].score);
-  }
+    app.factory('players', function ($rootScope, $webstorage) {
+        var webstorage = $webstorage($rootScope, 'local');
+        return webstorage.bind('players', 'players', function () {
+            var defaultValue = [];
+            for (var i = 0; i < 4; i++) {
+                var player =
+                {
+                    name: "Player " + (i + 1),
+                    score: 1000
+                }
+                defaultValue.push(player);
+            }
+            return defaultValue;
+        });
+    });
 
-  window.setInterval(function()
-      {
-        mahjongg.update();
-      }, 1000);
-};
+    app.factory('game', function ($rootScope, $webstorage) {
+        var webstorage = $webstorage($rootScope, 'local');
+        return webstorage.bind('game', 'game',
+            {
+                round: 0,
+                east: 0
+            });
+    });
 
-mahjongg.update = function()
-{
-  for (var i = 0 ; i < 4 ; i++)
-  {
-    var name = mahjongg.players[i].name;
-    if (i == mahjongg.east)
+    app.controller('MainCtrl', function()
     {
-      name += "*";
-    }
-    $('.auto-name' + i).html(name);
-    $('#score' + i).html(mahjongg.players[i].score);
-  }
-};
+    });
 
-mahjongg.endRound = function(winner, scores)
-{
-  $("#log").append("<div>Round " + mahjongg.round + ", winner is " + mahjongg.players[winner].name + "</div>");
-  var east = mahjongg.east;
-  for (var i = 0 ; i < 4 ; i++)
-  {
-    var name1 = mahjongg.players[i].name;
-    for (var j = 0 ; j < 4 ; j++)
+    app.controller('GameCtrl', function ($scope, players, game)
     {
-      var name2 = mahjongg.players[j].name;
-      if (i == j)
-      {
-        continue;
-      }
-      if (j == winner)
-      {
-        continue;
-      }
-      var payment = parseInt(scores[i]);
-      if (i == east || j == east)
-      {
-        payment *= 2;
-      }
-      $("#log").append("<div>" + name2 + " pays " + payment + " to " + name1 + " </div>");
-      mahjongg.players[i].score = parseInt(mahjongg.players[i].score) + payment;
-      mahjongg.players[j].score = parseInt(mahjongg.players[j].score) - payment;
-    }
-  }
-  mahjongg.round++;
-  if (east != winner)
-  {
-    mahjongg.east = (mahjongg.east + 1) % 4;
-  }
-  mahjongg.store();
-};
+        $scope.endRound = function()
+        {
+            var winner = parseInt($scope.inputWinner);
+            console.log("Round " + game.round + ", winner is " + players[winner].name);
+            for (var i = 0; i < 4; i++)
+            {
+                console.log("Hand of " + players[i].name + " is " + players[i].currentHand);
+            }
+            for (var i = 0; i < 4; i++)
+            {
+                var name1 = players[i].name;
+                for (var j = 0; j < 4; j++)
+                {
+                    var name2 = players[j].name;
+                    if (i == j || j == winner)
+                    {
+                        continue;
+                    }
+                    var payment = parseInt(players[i].currentHand);
+                    if (i == game.east || j == game.east) {
+                        payment *= 2;
+                    }
+                    console.log(name2 + " pays " + payment + " to " + name1);
+                    players[i].score = parseInt(players[i].score) + payment;
+                    players[j].score = parseInt(players[j].score) - payment;
+                }
+            }
+            game.round++;
+            if (game.east != winner)
+            {
+                game.east = (game.east + 1) % 4;
+            }
+            delete $scope.inputWinner;
+            for (var i = 0; i < 4; i++)
+            {
+                delete players[i].currentHand;
+            }
+        }
 
-mahjongg.reset = function()
-{
-  if (confirm("Do you confirm reset?"))
-  {
-    mahjongg.east = 0;
-    mahjongg.round = 0;
-    for (var i = 0 ; i < 4 ; i++)
-    {
-      mahjongg.players[i].score = 1000;
-    }
-    mahjongg.store();
-  }
-};
+        $scope.newGame = function()
+        {
+            for (var i = 0; i < 4; i++)
+            {
+                players[i].score = 1000;
+            }
+        }
+    });
 
-mahjongg.store = function()
-{
-  localStorage.setItem("east", mahjongg.east);
-  localStorage.setItem("round", mahjongg.round);
-  for (var i = 0 ; i < 4 ; i++)
-  {
-    localStorage.setItem("name" + i, mahjongg.players[i].name);
-    localStorage.setItem("score" + i, mahjongg.players[i].score);
-  }
-};
+    app.controller('ConfigureCtrl', function ($scope, players) {
+    });
 
-mahjongg.submit = function()
-{
-  mahjongg.endRound(parseInt($("#inputWinner").val()),
-      [
-        parseInt($("#inputScore0").val()),
-        parseInt($("#inputScore1").val()),
-        parseInt($("#inputScore2").val()),
-        parseInt($("#inputScore3").val()),
-      ]);
-  for (var i = 0 ; i < 4 ; i++)
-  {
-    $("#inputScore" + i).val("");
-  }
-};
+    app.controller('OverrideCtrl', function ($scope, $location, players) {
+        $scope.overridePlayers = players;
+        $scope.validate = function (clickEvent) {
+            var sum = 0;
+            $scope.overridePlayers.forEach(function (e) {
+                sum += parseInt(e.score);
+            });
+            if (sum != 4000) {
+                $scope.errorMessage = "Sum is " + sum + " but should be 4000";
+                return;
+            }
+            $location.path("/");
+        }
+    });
 
-mahjongg.init();
-
-$(function()
-{
-  mahjongg.update();
-});
+})();
