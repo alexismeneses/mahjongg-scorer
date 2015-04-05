@@ -110,13 +110,14 @@
             {
                 players[i].score = 1000;
             }
+            game.east = 0;
         }
     });
 
     app.controller('ConfigureCtrl', function ($scope, players) {
     });
 
-    app.controller('OverrideCtrl', function ($scope, $location, players) {
+    app.controller('OverrideCtrl', function ($scope, $location, players, game) {
         $scope.overridePlayers = players;
         $scope.validate = function (clickEvent) {
             var sum = 0;
@@ -129,6 +130,7 @@
             }
             $location.path("/");
         }
+        $scope.game = game;
     });
 
 })();
